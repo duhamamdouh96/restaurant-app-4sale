@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Customer\ReservationController;
 use App\Http\Controllers\Api\Waiter\Auth\AuthController as WaiterAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,9 +28,13 @@ Route::prefix('customers')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('customers.register');
     Route::post('login', [AuthController::class, 'login'])->name('customers.login');
 
-    Route::middleware(['auth.customer', 'customer:customer'])->group(function () {
+    Route::middleware(['auth:customer', 'customer:customer'])->group(function () {
         // Logout
         Route::post('logout', [AuthController::class, 'logout'])->name('customers.logout');
+
+        // check availability
+        Route::post('check_availability', [ReservationController::class, 'checkAvailability'])->name('customers.checlAvailability');
+
     });
 
 });

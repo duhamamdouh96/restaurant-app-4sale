@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public $customer;
+    public $waiter;
     public $response;
 
     public function __construct(User $waiter, Response $response)
@@ -41,9 +41,7 @@ class AuthController extends Controller
     public function login(WaiterLoginRequest $request)
     {
         try {
-            $this->waiter->login($request->email, $request->password);
-
-            $waiter = auth()->user();
+            $waiter = $this->waiter->login($request->email, $request->password);
 
             return (new WaiterResource($waiter))
                 ->additional(['token' => $waiter->createToken('waiterApiToken')->plainTextToken])
@@ -56,7 +54,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        auth()->guard('api')->user()->tokens()->delete();
 
         return $this->response->success([], Message::LOGUT);
     }

@@ -40,9 +40,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         try {
-            $this->customer->login($request->email, $request->password);
-
-            $customer = auth()->guard('customer')->user();
+            $customer = $this->customer->login($request->email, $request->password);
 
             return (new CustomerResource($customer))
                 ->additional(['token' => $customer->createToken('customerApiToken')->plainTextToken])

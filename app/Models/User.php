@@ -50,7 +50,7 @@ class User extends Authenticatable
     {
         return $this->create([
             'name' => $name,
-            'email' => $email,
+            'email' => strtolower($email),
             'password' => Hash::make($password),
             'phone' => $phone ?? null
         ]);
@@ -58,13 +58,12 @@ class User extends Authenticatable
 
     public function login(string $email, string $password)
     {
-        if (!auth()->attempt([
-            'email' => strtolower($email),
-            'password' => $password,
-        ])) {
+        $user = $this->where('email', strtolower($email))->first();
+
+        if (! $user || ! Hash::check($password, $user->password)) {
             throw new CredentialsNotCorrectException();
         }
 
-        return auth()->user();
+        return $user;
     }
 }

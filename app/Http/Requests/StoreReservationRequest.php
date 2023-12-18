@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Traits\HasFailedValidationResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckAvailabiltyRequest extends FormRequest
+class StoreReservationRequest extends FormRequest
 {
     use HasFailedValidationResponse;
 

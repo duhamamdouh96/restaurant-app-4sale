@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Customer\MealController;
+use App\Http\Controllers\Api\Customer\OrderController;
 use App\Http\Controllers\Api\Customer\ReservationController;
 use App\Http\Controllers\Api\Waiter\Auth\AuthController as WaiterAuthController;
 use Illuminate\Http\Request;
@@ -28,13 +30,21 @@ Route::prefix('customers')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('customers.register');
     Route::post('login', [AuthController::class, 'login'])->name('customers.login');
 
-    Route::middleware(['auth:customer', 'customer:customer'])->group(function () {
+    // Check availability
+    Route::post('check_availability', [ReservationController::class, 'checkAvailability'])->name('customers.checkAvailability');
+
+    // List menu items
+    Route::get('list_menu_items', [MealController::class, 'index'])->name('customers.listMenuItems');
+
+    Route::middleware(['auth:sanctum', 'customer:customer'])->group(function () {
         // Logout
         Route::post('logout', [AuthController::class, 'logout'])->name('customers.logout');
 
-        // check availability
-        Route::post('check_availability', [ReservationController::class, 'checkAvailability'])->name('customers.checlAvailability');
+        // Reserve table
+        Route::post('reserve_table', [ReservationController::class, 'store'])->name('customers.reserveTable');
 
+        // Order
+        Route::post('order', [OrderController::class, 'store'])->name('customers.order');
     });
 
 });
@@ -45,7 +55,7 @@ Route::prefix('waiters')->group(function () {
     Route::post('register', [WaiterAuthController::class, 'register'])->name('waiters.register');
     Route::post('login', [WaiterAuthController::class, 'login'])->name('waiters.login');
 
-    Route::middleware(['auth', 'customer:api'])->group(function () {
+    Route::middleware(['auth:sanctum', 'customer:api'])->group(function () {
         // Logout
         Route::post('logout', [WaiterAuthController::class, 'logout'])->name('waiters.logout');
     });

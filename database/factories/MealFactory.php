@@ -21,7 +21,7 @@ class MealFactory extends Factory
             'description' => $this->faker->text(500),
             'price' => rand(100, 500),
             'available_quantity' => rand(1, 10),
-            'disocunt' => rand(10, 50)
+            'discount' => rand(10, 50)
         ];
     }
 }

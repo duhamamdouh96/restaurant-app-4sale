@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('table_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamp('from')->nullable();
-            $table->timestamp('to')->nullable();
+            $table->timestamp('from_date_time')->nullable();
+            $table->timestamp('to_date_time')->nullable();
+            $table->integer('guests_count')->nullable();
             $table->timestamps();
         });
     }

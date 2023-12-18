@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Customer\CheckoutController;
 use App\Http\Controllers\Api\Customer\MealController;
 use App\Http\Controllers\Api\Customer\OrderController;
 use App\Http\Controllers\Api\Customer\ReservationController;
@@ -45,6 +46,9 @@ Route::prefix('customers')->group(function () {
 
         // Order
         Route::post('order', [OrderController::class, 'store'])->name('customers.order');
+
+        // Checkout
+        Route::post('checkout', [CheckoutController::class, 'index'])->name('customers.checkout');
     });
 
 });

@@ -15,4 +15,7 @@ enum Message
     const RESERVATION_NOT_AUTHORIZED = 'reservationNotAuthorized';
     const TABLE_NOT_AUTHORIZED = 'tableNotAuthorized';
     const MEALS_NOT_AVAILABLE = 'mealsNotAvailable';
+    const UNSUPPORTED_CHECKOUT_METHOD = 'unsuppotedCheckoutMethod';
+    const ORDER_NOT_AUTHORIZED = 'orderNotAuthorized';
+    const CHECKOUT_EXCEPTION = 'checkoutException';
 }

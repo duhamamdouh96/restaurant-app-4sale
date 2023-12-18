@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('reservation_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('table_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->float('total')->nullable();
-            $table->boolean('is_paid')->default(false);
-            $table->timestamp('date')->nullable();
+            $table->float('paid_amount')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }

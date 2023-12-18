@@ -35,6 +35,8 @@ class Table extends Model
 
     public function scopeWhereDoesnotHaveReservations($query, $date, $from, $to)
     {
+        // dd( (new Reservation)->available($date, $from, $to)->pluck('table_id')->toArray());
+        // 18, 9
         return $query->whereNotIn(
             'id',
             (new Reservation)->available($date, $from, $to)->pluck('table_id')->toArray()

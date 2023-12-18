@@ -41,6 +41,7 @@ class Reservation extends Model
 
     public function scopeAvailable($query, $date, $from, $to)
     {
+        // fix where between dates here
         return $query->whereBetween('from_date_time', [
             Carbon::parse($date. ' ' .$from)->format('Y-m-d H:i:s'),
             Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s')

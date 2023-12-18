@@ -20,31 +20,33 @@ class Meal extends Model
 
     public function scopeAvailable($query)
     {
-        $remaminigMealsCount = $this->orders()->today()->count();
+        $orderMealsCount = $this->orders()->today()->count();
 
-        return $query->where('available_quantity', '>=', $remaminigMealsCount);
+        return $query->where('available_quantity', '>', 0)->where('available_quantity', '>', $orderMealsCount);
     }
 
     public function validate(array $mealsIds) : array
     {
-        $mealsNotAvailable = [];
+        $isValid = true;
+        $mealsArray = [];
         $meals = $this->whereIn('id', $mealsIds)->get();
 
         foreach($meals as $meal) {
             if(!$meal->isAvailable()) {
-                $mealsNotAvailable[] = $meal;
+                $mealsArray[] = $meal;
+                $isValid = false;
             }
         }
 
         return [
-            'status' => $meals->count() == count($mealsIds),
-            'mealsNotAvailaible' => $mealsNotAvailable
+            'status' => $isValid,
+            'mealsNotAvailable' => $mealsArray
         ];
     }
 
     public function isAvailable() : bool
     {
-        return $this->available_quantity >= $this->orders()->today()->count();
+        return ($this->available_quantity > 0) && ($this->available_quantity > $this->orders()->today()->count());
     }
 
     public function getByIds($mealsIds) : Collection

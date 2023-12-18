@@ -11,8 +11,6 @@ use App\Http\Resources\ReservationResource;
 use App\Http\Resources\TableResource;
 use App\Models\Reservation;
 use App\Models\Table;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
@@ -29,15 +27,11 @@ class ReservationController extends Controller
 
     public function checkAvailability(CheckAvailabiltyRequest $request)
     {
-        $availabileTables = $this->table->whereHasCapacity($request->guests_count);
+        $availabileTables = $this->table
+            ->whereHasCapacity($request->guests_count)
+            ->whereDoesnotHaveReservations($request->date, $request->from, $request->to)->get();
 
-        if($availabileTables->count() <= 0) {
-            return $this->response->error(Message::TABLE_CAPACITY_NOT_AVAILAIBLE);
-        }
-
-        $availabileTables = $availabileTables->whereDoesnotHaveReservations($request->date, $request->from, $request->to);
-
-        if($availabileTables->count() <= 0) {
+        if($availabileTables->isEmpty()) {
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 

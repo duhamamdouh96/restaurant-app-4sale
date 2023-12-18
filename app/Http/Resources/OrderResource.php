@@ -21,7 +21,8 @@ class OrderResource extends JsonResource
             'details' => OrderDetailRessource::collection($this->details),
             'total' => $this->total,
             'date' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
-            'paid_at' => $this->paid_at
+            'paid_at' => $this->paid_at,
+            'paid_amount' => $this->paid_amount
         ];
     }
 }

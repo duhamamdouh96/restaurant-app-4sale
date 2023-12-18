@@ -10,6 +10,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Common\Services\CheckoutService;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CheckoutController extends Controller
 {
@@ -34,9 +35,8 @@ class CheckoutController extends Controller
 
             // print invoice
             return (new OrderResource($order->refresh()));
-        } catch(Exception $exception) {
+        } catch(ModelNotFoundException $exception) {
             throw new CheckoutException();
         }
-
     }
 }

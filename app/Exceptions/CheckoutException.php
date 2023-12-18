@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Common\Enums\Message;
+use App\Common\Response;
 use Exception;
 
 class CheckoutException extends Exception
@@ -23,6 +25,6 @@ class CheckoutException extends Exception
      */
     public function render()
     {
-        return (new Response())->exception(Message::WRONG_CREDENTIALS);
+        return (new Response())->exception(Message::CHECKOUT_EXCEPTION);
     }
 }

@@ -11,7 +11,6 @@ use App\Http\Requests\WaiterLoginRequest;
 use App\Http\Requests\WaiterRegisterRequest;
 use App\Http\Resources\WaiterResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {

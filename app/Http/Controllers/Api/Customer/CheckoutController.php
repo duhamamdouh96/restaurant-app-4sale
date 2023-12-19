@@ -36,6 +36,15 @@ class CheckoutController extends Controller
             $order->reservation->table->updateAvailabilty(true);
 
             // print invoice
+            // $data = [
+            //     'order' => $order,
+            // ];
+
+            // $pdf = PDF::loadView('pdf.table', [
+            //     'order' => $order
+            // ]);
+
+            // return $pdf->download('table.pdf');
             return (new OrderResource($order->refresh()));
         } catch(ModelNotFoundException $exception) {
             throw new CheckoutException();

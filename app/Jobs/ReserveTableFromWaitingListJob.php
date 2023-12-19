@@ -32,7 +32,6 @@ class ReserveTableFromWaitingListJob implements ShouldQueue
      */
     public function handle(): void
     {
-        dd($this->nextOnWaitingList);
         $date = Carbon::parse($this->nextOnWaitingList->from_date_time)->format('Y-m-d');
         $from = Carbon::parse($this->nextOnWaitingList->from_date_time)->format('h:i a');
         $to = Carbon::parse($this->nextOnWaitingList->to_date_time)->format('h:i a');

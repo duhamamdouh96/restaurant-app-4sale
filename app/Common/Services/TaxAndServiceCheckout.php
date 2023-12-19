@@ -12,6 +12,9 @@ class TaxAndServiceCheckout implements CheckoutService
         $order->update([
             'paid_amount' => $this->calculateTotal($order->total),
             'paid_at' => Carbon::now(),
+            'checkout_method' => 'taxAndService',
+            'tax' => $this->taxPercentage(),
+            'service' => $this->servicePercentage(),
         ]);
 
         return $order;

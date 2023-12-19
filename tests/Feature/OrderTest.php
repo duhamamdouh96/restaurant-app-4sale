@@ -52,7 +52,6 @@ class OrderTest extends TestCase
             'meals'  => [$this->meals[0]->id, $this->meals[1]->id]
         ]));
 
-        dd($response->decodeResponseJson());
         $this->assertDatabaseHas('orders', [
             'reservation_id' => $this->reservation[0]->id,
         ]);

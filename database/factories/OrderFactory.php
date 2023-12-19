@@ -24,7 +24,8 @@ class OrderFactory extends Factory
             'table_id' => Table::factory(),
             'reservation_id' => Reservation::factory(),
             'customer_id' => Customer::factory(),
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
+            'unique_id' => uniqid()
         ];
     }
 }

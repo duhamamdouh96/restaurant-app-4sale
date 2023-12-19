@@ -20,6 +20,10 @@ return new class extends Migration
             $table->float('total')->nullable();
             $table->float('paid_amount')->nullable();
             $table->timestamp('paid_at')->nullable();
+            $table->string('unique_id')->nullable();
+            $table->string('checkout_method')->nullable();
+            $table->float('tax_percentage')->nullable();
+            $table->float('service_percentage')->nullable();
             $table->timestamps();
         });
     }

@@ -49,7 +49,8 @@ class Order extends Model
             'reservation_id' => $reservationId,
             'table_id' => $tableId,
             'customer_id' => $customerId,
-            'user_id' => User::first()->id ?? (new User)->store()->id
+            'user_id' => User::first()->id ?? (new User)->store()->id,
+            'unique_id' => uniqid().'-'.$reservationId
         ]);
 
         $order->attachMeals($mealsIds);

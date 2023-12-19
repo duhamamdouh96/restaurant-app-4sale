@@ -17,6 +17,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'unique_id' => $this->unique_id,
             'reservation' => ReservationResource::make($this->reservation),
             'details' => OrderDetailRessource::collection($this->details),
             'total' => $this->total,

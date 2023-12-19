@@ -10,6 +10,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Common\Services\CheckoutService;
 use Exception;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CheckoutController extends Controller
@@ -35,18 +36,11 @@ class CheckoutController extends Controller
 
             $order->reservation->table->updateAvailabilty(true);
 
-            // print invoice
-            // $data = [
-            //     'order' => $order,
-            // ];
+            $pdf = Pdf::loadView('invoice', [ 'order' => $order->refresh()]);
 
-            // $pdf = PDF::loadView('pdf.table', [
-            //     'order' => $order
-            // ]);
+            return $pdf->download('invoice.pdf');
 
-            // return $pdf->download('table.pdf');
-            return (new OrderResource($order->refresh()));
-        } catch(ModelNotFoundException $exception) {
+        } catch(Exception $exception) {
             throw new CheckoutException();
         }
     }

@@ -37,15 +37,11 @@ class Reservation extends Model
         ]);
     }
 
-    public function scopeAvailable($query, string $date, string $from, string $to) : Builder
+    public function scopeAvailable($query, string $fromDateTime, string $toDateTime) : Builder
     {
-        // fix where between dates here
-        return $query->whereBetween('from_date_time', [
-            Carbon::parse($date. ' ' .$from)->format('Y-m-d H:i:s'),
-            Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s')
-        ])->whereBetween('to_date_time', [
-            Carbon::parse($date. ' ' .$from)->format('Y-m-d H:i:s'),
-            Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s')
-        ]);
+        return $query->join('reservations as res', function ($join) {
+            $join->on('tables.id', '=', 'res.table_id');
+        })->select('tables.id')->groupBy('tables.id')
+            ->havingRaw("MAX(res.to_date_time) <= '$fromDateTime' OR MIN(res.from_date_time) >= '$toDateTime'");
     }
 }

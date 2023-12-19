@@ -30,7 +30,7 @@ class ReservationController extends Controller
         $this->reservation = $reservation;
         $this->table = $table;
         $this->response = $response;
-        $this->response = $waitingList;
+        $this->waitingList = $waitingList;
     }
 
     public function checkAvailability(CheckAvailabiltyRequest $request)
@@ -40,7 +40,7 @@ class ReservationController extends Controller
             ->get();
 
         if($availabileTables->isEmpty()) {
-            $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to);
+            // $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to);
 
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }

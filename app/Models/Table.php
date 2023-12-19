@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,7 +22,7 @@ class Table extends Model
     public function scopeAvailable($query, int $guestsCount, string $date, string $from, string $to) : Builder
     {
         return $query->whereHasCapacity($guestsCount)
-            ->whereDoesnotHaveReservations($query, $date, $from, $to);
+            ->whereDoesnotHaveReservations($date, $from, $to);
     }
 
     public function scopeWhereHasCapacity($query, int $guestsCount) : Builder
@@ -31,9 +32,14 @@ class Table extends Model
 
     public function scopeWhereDoesnotHaveReservations($query, string $date, string $from, string $to) : Builder
     {
-        return $query->whereNotIn(
-            'id',
-            (new Reservation)->available($date, $from, $to)->pluck('table_id')->toArray()
-        );
+        $fromDateTime = Carbon::parse($date. ' ' .$from)->format('Y-m-d H:i:s');
+        $toDateTime = Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s');
+
+        return $query->where(function ($q) use ($fromDateTime, $toDateTime) {
+            $q->whereDoesntHave('reservation')
+                ->orWhereHas('reservation', function ($reservation) use ($fromDateTime, $toDateTime) {
+                    $reservation->available($fromDateTime, $toDateTime);
+                });
+            });
     }
 }

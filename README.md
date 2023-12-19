@@ -3,7 +3,7 @@
 ## Clone the repository
 
  - Open your favorite terminal
- - Clone the repository in the work directory through the following command:
+ - Clone the repository in your working directory through the following command:
    
        $ git clone https://github.com/duhamamdouh96/restaurant-app-4sale.git
 
@@ -33,7 +33,7 @@ Run the following command to make an alias of sail:
 
     $ alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
     
-And then run the following command to create the app containers: 
+Then run the following command to create the app containers: 
 
     $ sail up -d
 
@@ -52,5 +52,8 @@ Open Postman or any app like it and go through the Postman collection:
 You may also try to run the tests:
 
     $ sail artisan test 
+
+*I assumed that we have waiters "users" in the application and we have an API to get all the available waiters to assign each to order,
+Also, the application should have a listing for reservations API per customer, waiter, and admin*
 
 That's it and you're good to go!

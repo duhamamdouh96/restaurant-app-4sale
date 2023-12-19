@@ -40,7 +40,7 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function store($reservationId, $tableId, $mealsIds, $customerId)
+    public function store($reservationId, $tableId, $mealsIds, $customerId) : self
     {
         $order = $this->create([
             'reservation_id' => $reservationId,
@@ -64,7 +64,7 @@ class Order extends Model
         });
     }
 
-    public function calculateTotal()
+    public function calculateTotal() : float
     {
         return $this->update(['total' => $this->details()->pluck('amount_to_pay')->sum()]);
     }

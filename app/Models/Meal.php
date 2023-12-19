@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class Meal extends Model
 {
@@ -18,29 +19,37 @@ class Meal extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function scopeAvailable($query)
+    public function scopeAvailable($query) : Builder
     {
-        $orderMealsCount = $this->orders()->today()->count();
-
-        return $query->where('available_quantity', '>', 0)->where('available_quantity', '>', $orderMealsCount);
+        return $query->where('available_quantity', '>', 0)
+            ->where(function ($q) {
+                $q->whereDoesntHave('orders')->orWhereHas('orders', function ($order) {
+                    $order->join('order_details as details', function ($join) {
+                        $join->on('meals.id', '=', 'details.meal_id');
+                    })
+                ->select('meals.id', 'meals.available_quantity')
+                ->groupBy('meals.id', 'meals.available_quantity')
+                ->havingRaw('meals.available_quantity > COUNT(CASE WHEN DATE(details.created_at) = CURDATE() THEN details.meal_id END)');
+            });
+        });
     }
 
     public function validate(array $mealsIds) : array
     {
         $isValid = true;
-        $mealsArray = [];
+        $mealsNotAvailable = [];
         $meals = $this->whereIn('id', $mealsIds)->get();
 
         foreach($meals as $meal) {
             if(!$meal->isAvailable()) {
-                $mealsArray[] = $meal;
+                $mealsNotAvailable[] = $meal;
                 $isValid = false;
             }
         }
 
         return [
             'status' => $isValid,
-            'mealsNotAvailable' => $mealsArray
+            'mealsNotAvailable' => $mealsNotAvailable
         ];
     }
 

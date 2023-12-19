@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use App\Exceptions\TableNotFoundException;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Table extends Model
 {
@@ -21,22 +18,19 @@ class Table extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function checkCapacity($guestsCount) : bool
+    public function scopeAvailable($query, int $guestsCount, string $date, string $from, string $to) : Builder
     {
-        return ($this->isCapacityAvailaible($guestsCount)->get()->isNotEmpty())
-            ? true
-            : false;
+        return $query->whereHasCapacity($guestsCount)
+            ->whereDoesnotHaveReservations($query, $date, $from, $to);
     }
 
-    public function scopeWhereHasCapacity($query, $guestsCount)
+    public function scopeWhereHasCapacity($query, int $guestsCount) : Builder
     {
         return $query->where('capacity', '>=', $guestsCount);
     }
 
-    public function scopeWhereDoesnotHaveReservations($query, $date, $from, $to)
+    public function scopeWhereDoesnotHaveReservations($query, string $date, string $from, string $to) : Builder
     {
-        // dd( (new Reservation)->available($date, $from, $to)->pluck('table_id')->toArray());
-        // 18, 9
         return $query->whereNotIn(
             'id',
             (new Reservation)->available($date, $from, $to)->pluck('table_id')->toArray()

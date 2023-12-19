@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Exceptions\ReseravtionNotAvailableException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Reservation extends Model
 {
@@ -28,7 +26,7 @@ class Reservation extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function store(Table $table, int $guestsCount, string $date, string $from, string $to)
+    public function store(Table $table, int $guestsCount, string $date, string $from, string $to) : self
     {
         return $this->create([
             'table_id' => $table->id,
@@ -39,7 +37,7 @@ class Reservation extends Model
         ]);
     }
 
-    public function scopeAvailable($query, $date, $from, $to)
+    public function scopeAvailable($query, string $date, string $from, string $to) : Builder
     {
         // fix where between dates here
         return $query->whereBetween('from_date_time', [

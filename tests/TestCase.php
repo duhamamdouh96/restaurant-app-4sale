@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Customer;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Laravel\Sanctum\Sanctum;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -12,6 +13,10 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->withHeaders([
+            'Accept' => 'application/json',
+        ]);
     }
 
     protected function authenticate($customer = null)
@@ -20,6 +25,6 @@ abstract class TestCase extends BaseTestCase
             $customer = Customer::factory()->create();
         }
 
-        return $this->actingAs($customer, 'customer');
+        return Sanctum::actingAs($customer);
     }
 }

@@ -11,44 +11,50 @@ use App\Http\Resources\ReservationResource;
 use App\Http\Resources\TableResource;
 use App\Models\Reservation;
 use App\Models\Table;
+use App\Models\WaitingList;
 
 class ReservationController extends Controller
 {
     public $reservation;
     public $table;
     public $response;
+    public $waitingList;
 
-    public function __construct(Reservation $reservation, Table $table, Response $response)
+    public function __construct(
+        Reservation $reservation,
+        Table $table,
+        Response $response,
+        WaitingList $waitingList
+    )
     {
         $this->reservation = $reservation;
         $this->table = $table;
         $this->response = $response;
+        $this->response = $waitingList;
     }
 
     public function checkAvailability(CheckAvailabiltyRequest $request)
     {
         $availabileTables = $this->table
-            ->whereHasCapacity($request->guests_count)
-            ->whereDoesnotHaveReservations($request->date, $request->from, $request->to)->get();
+            ->available($request->guests_count, $request->date, $request->from, $request->to)
+            ->get();
 
         if($availabileTables->isEmpty()) {
+            $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to);
+
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 
-        return TableResource::collection($availabileTables->get());
+        return TableResource::collection($availabileTables);
     }
 
     public function store(StoreReservationRequest $request)
     {
-        $availabileTables = $this->table->whereHasCapacity($request->guests_count);
+        $availabileTables = $this->table
+            ->available($request->guests_count, $request->date, $request->from, $request->to)
+            ->get();
 
-        if($availabileTables->count() <= 0) {
-            return $this->response->error(Message::TABLE_CAPACITY_NOT_AVAILAIBLE);
-        }
-
-        $availabileTables = $availabileTables->whereDoesnotHaveReservations($request->date, $request->from, $request->to);
-
-        if($availabileTables->count() <= 0) {
+        if($availabileTables->isEmpty()) {
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 

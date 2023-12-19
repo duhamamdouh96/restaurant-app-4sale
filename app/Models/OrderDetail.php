@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderDetail extends Model
 {
@@ -25,12 +26,12 @@ class OrderDetail extends Model
         return $this->belongsTo(Meal::class);
     }
 
-    public function scopeToday($query)
+    public function scopeToday($query) : Builder
     {
         return $query->whereDate('created_at', Carbon::today());
     }
 
-    public function store(int $rderId, Meal $meal)
+    public function store(int $rderId, Meal $meal) : self
     {
         return $this->create([
             'order_id' => $rderId,

@@ -29,19 +29,19 @@ After the ports have been turned off, Please run the following command to instal
         laravelsail/php83-composer:latest \
         composer install --ignore-platform-reqs
     
-Run the following command:
+Run the following command to make an alias of sail:
 
     $ alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
     
-And then run the following command: 
+And then run the following command to create the app containers: 
 
     $ sail up -d
 
-Run the following command:
+Run the following command to generate the app key inside .env file:
 
     $ sail artisan key:generate
 
-Run the following command:
+Run the following command to create the database tables:
 
     $ sail artisan migrate --seed
     

@@ -56,6 +56,6 @@ You may also try to run the tests:
 *I assumed that we have waiters "users" in the application and we have an API to get all the available waiters to assign each to order,
 Also, the application should have a listing for reservations API per customer, waiter, and admin*
 
-*I assumed that we configured a cron entry in the server "Laravel task scheduling" to run every hour to check if a table is available for the waiting list table records*
+*Also I assumed that we configured a cron entry in the server "Laravel task scheduling" to run every hour to check if a table is available and reserve it for the next record on the waiting list*
 
 That's it and you're good to go!

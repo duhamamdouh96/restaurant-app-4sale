@@ -18,4 +18,9 @@ class WaitingList extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function store()
+    {
+
+    }
 }

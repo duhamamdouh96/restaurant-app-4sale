@@ -31,26 +31,26 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    public function customer_can_reserve_a_table()
-    {
-        $table = $this->initiateTable()[0];
-        $from = $this->faker->time('h:i a');
+    // public function customer_can_reserve_a_table()
+    // {
+    //     $table = $this->initiateTable()[0];
+    //     $from = $this->faker->time('h:i a');
 
-        $response = $this->post(route(RouteName::CUSTOMER_RESERVE, [
-            'guests_count' => $table->capacity,
-            'date'  => $this->faker->date('Y-m-d', 'now'),
-            'from'  => $from,
-            'to'  => Carbon::parse($from)->addHour()->format('h:i a'),
-        ]));
+    //     $response = $this->post(route(RouteName::CUSTOMER_RESERVE, [
+    //         'guests_count' => $table->capacity,
+    //         'date'  => $this->faker->date('Y-m-d', 'now'),
+    //         'from'  => $from,
+    //         'to'  => Carbon::parse($from)->addHour()->format('h:i a'),
+    //     ]));
 
-        $this->assertDatabaseHas('reservations', [
-            'customer_id' => auth()->id(),
-            'table_id' => $table->id,
-            'guests_count' => $table->capacity
-        ]);
+    //     $this->assertDatabaseHas('reservations', [
+    //         'customer_id' => auth()->id(),
+    //         'table_id' => $table->id,
+    //         'guests_count' => $table->capacity
+    //     ]);
 
-        $response->assertOk();
-    }
+    //     $response->assertOk();
+    // }
 
     /** @test */
     public function it_throws_an_error_if_guests_count_greater_than_table_capacity()

@@ -17,7 +17,7 @@ class TableFactory extends Factory
     public function definition(): array
     {
         return [
-            'capacity' => rand(2, 15),
+            'capacity' => $this->faker->numberBetween(1, 20)
         ];
     }
 }

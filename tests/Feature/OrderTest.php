@@ -13,7 +13,7 @@ use App\Models\Table;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
-class CheckoutTest extends TestCase
+class OrderTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

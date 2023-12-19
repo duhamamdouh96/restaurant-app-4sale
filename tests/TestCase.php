@@ -25,6 +25,6 @@ abstract class TestCase extends BaseTestCase
             $customer = Customer::factory()->create();
         }
 
-        return Sanctum::actingAs($customer);
+        return Sanctum::actingAs($customer,  ['*'], 'customer');
     }
 }

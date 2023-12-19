@@ -2,14 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Common\Enums\CheckoutMethod;
 use App\Common\Enums\RouteName;
 use Tests\TestCase;
-use App\Models\Order;
 use App\Models\Meal;
-use App\Models\OrderDetail;
 use App\Models\Reservation;
-use App\Models\Table;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -46,12 +42,15 @@ class OrderTest extends TestCase
     /** @test */
     public function customer_can_create_an_order()
     {
+        $this->authenticate();
+
         $response = $this->post(route(RouteName::CUSTOMER_ORDER, [
             'reservation_id' => $this->reservation[0]->id,
             'table_id' => $this->reservation[0]->table_id,
             'meals'  => [$this->meals[0]->id, $this->meals[1]->id]
         ]));
 
+        dd($response->decodeResponseJson());
         $this->assertDatabaseHas('orders', [
             'reservation_id' => $this->reservation[0]->id,
         ]);

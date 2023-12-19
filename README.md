@@ -3,7 +3,7 @@
 ## Clone the repository
 
  - Open your favorite terminal
- - Clone the repository through the following command:
+ - Clone the repository in the work directory through the following command:
    
        $ git clone https://github.com/duhamamdouh96/restaurant-app-4sale.git
 

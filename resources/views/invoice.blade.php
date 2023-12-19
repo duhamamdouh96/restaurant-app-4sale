@@ -4,7 +4,8 @@
     <title>Invoice</title>
 </head>
 <body>
-    <table border="1">
+    <h3 style="text-align: center">Invoice</h3>
+    <table border="1" style="margin-bottom:15px; width:100%;">
         <thead>
             <tr>
                 <th>ID</th>
@@ -20,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr style="text-align: center; width:100%;">
                 <td>{{ $order->unique_id }}</td>
                 <td>{{ $order->paid_amount }}</td>
                 @if($order->tax)
@@ -35,7 +36,9 @@
         </tbody>
     </table>
 
-    <table border="1">
+    <h3 style="text-align: center">Meals</h3>
+
+    <table border="1" style="margin-bottom:15px;">
         <thead>
             <tr>
                 <th>Meal description</th>
@@ -46,7 +49,7 @@
         </thead>
         <tbody>
             @foreach ($order->details as $detail)
-                <tr>
+                <tr style="text-align: center;">
                     <td>{{ $detail->meal->description }}</td>
                     <td>{{ $detail->meal->price }}</td>
                     <td>{{ $detail->meal->discount }}</td>
@@ -57,7 +60,7 @@
         </tbody>
     </table>
 
-    <button onclick="printPDF()">Print</button>
+    <button style="padding:5px 10px;" onclick="printPDF()">Print</button>
 
     <script>
         function printPDF() {

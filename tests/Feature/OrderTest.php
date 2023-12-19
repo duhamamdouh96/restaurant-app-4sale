@@ -42,19 +42,16 @@ class OrderTest extends TestCase
     /** @test */
     public function customer_can_create_an_order()
     {
-        $this->authenticate();
-
-        $response = $this->post(route(RouteName::CUSTOMER_ORDER, [
+        $response = $this->actingAs($this->customer, 'sanctum')->post(route(RouteName::CUSTOMER_ORDER, [
             'reservation_id' => $this->reservation[0]->id,
             'table_id' => $this->reservation[0]->table_id,
             'meals'  => [$this->meals[0]->id, $this->meals[1]->id]
         ]));
 
-        dd($response->decodeResponseJson());
         $this->assertDatabaseHas('orders', [
             'reservation_id' => $this->reservation[0]->id,
         ]);
 
-        $response->assertOk();
+        $response->assertOk()->assertSee(['data.reservation.id' => $this->reservation[0]->id]);
     }
 }

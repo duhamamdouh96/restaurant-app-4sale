@@ -18,4 +18,5 @@ enum Message
     const UNSUPPORTED_CHECKOUT_METHOD = 'unsuppotedCheckoutMethod';
     const ORDER_NOT_AUTHORIZED = 'orderNotAuthorized';
     const CHECKOUT_EXCEPTION = 'checkoutException';
+    const RESERVATION_NOT_FOUND_ERROR = 'reservationNotFound';
 }

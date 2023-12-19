@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Exceptions\ReseravtionNotAuthorizedException;
+use App\Exceptions\ReservationNotFoundException;
 use App\Exceptions\TableNotAuthorizedException;
 use App\Models\Reservation;
 use App\Models\Table;
@@ -21,6 +23,11 @@ class StoreOrderRequest extends FormRequest
         $isAuthorized = true;
 
         $reservation = (new Reservation)->findOrFail(request()->reservation_id);
+
+        if(!$reservation) {
+            throw new ReservationNotFoundException();
+        }
+
         $isAuthorized = Gate::allows('own', $reservation);
 
         if ($reservation->table_id != request()->table_id) {

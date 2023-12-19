@@ -31,43 +31,43 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    // public function customer_can_reserve_a_table()
-    // {
-    //     $table = $this->initiateTable()[0];
-    //     $from = $this->faker->time('h:i a');
+    public function customer_can_reserve_a_table()
+    {
+        $table = $this->initiateTable()[0];
+        $date = $this->faker->dateTimeBetween('+1 days', '+2 years')->format('Y-m-d');
+        $from = Carbon::parse($date)->addHour()->format('h:i a');
 
-    //     $response = $this->post(route(RouteName::CUSTOMER_RESERVE, [
-    //         'guests_count' => $table->capacity,
-    //         'date'  => $this->faker->date('Y-m-d', 'now'),
-    //         'from'  => $from,
-    //         'to'  => Carbon::parse($from)->addHour()->format('h:i a'),
-    //     ]));
+        $response = $this->actingAs($this->customer, 'sanctum')->post(route(RouteName::CUSTOMER_RESERVE, [
+            'guests_count' => $table->capacity,
+            'date'  => $date,
+            'from'  => $from,
+            'to'  => Carbon::parse($from)->addHour()->format('h:i a'),
+        ]));
 
-    //     $this->assertDatabaseHas('reservations', [
-    //         'customer_id' => auth()->id(),
-    //         'table_id' => $table->id,
-    //         'guests_count' => $table->capacity
-    //     ]);
+        $this->assertDatabaseHas('reservations', [
+            'customer_id' => auth()->id(),
+            'table_id' => $table->id,
+            'guests_count' => $table->capacity
+        ]);
 
-    //     $response->assertOk();
-    // }
+        $response->assertOk()->assertSee(['data.guests_count' => $table->capacity]);
+    }
 
     /** @test */
     public function it_throws_an_error_if_guests_count_greater_than_table_capacity()
     {
         $this->initiateTable(3)[0];
 
-        $from = $this->faker->time('h:i a');
-        $response = $this->post(route(RouteName::CUSTOMER_RESERVE, [
+        $date = $this->faker->dateTimeBetween('+1 days', '+2 years')->format('Y-m-d');
+        $from = Carbon::parse($date)->addHour()->format('h:i a');
+
+        $response = $this->actingAs($this->customer, 'sanctum')->post(route(RouteName::CUSTOMER_RESERVE, [
             'guests_count' => 5,
-            'date'  => $this->faker->date('Y-m-d', 'now'),
+            'date'  => $date,
             'from'  => $from,
             'to'  => Carbon::parse($from)->addHour()->format('h:i a'),
         ]));
 
-        $response->assertStatus(401)
-            ->assertJson(function(AssertableJson $json) {
-                $json->where('message', Message::RESERVATION_NOT_AVAILAIBLE)->etc();
-            });
+        $response->assertStatus(401)->assertSee(['message' => Message::RESERVATION_NOT_AVAILAIBLE]);
     }
 }

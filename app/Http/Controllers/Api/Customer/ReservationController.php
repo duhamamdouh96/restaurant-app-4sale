@@ -43,7 +43,7 @@ class ReservationController extends Controller
         )->get();
 
         if($availabileTables->isEmpty()) {
-            return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
+            return $this->response->exception(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 
         return $this->response->success(['available_tables' => TableResource::collection($availabileTables)]);
@@ -61,7 +61,7 @@ class ReservationController extends Controller
         if($availabileTables->isEmpty()) {
             $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to, auth()->id());
 
-            return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
+            return $this->response->exception(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 
         $reservation = $this->reservation->store(
@@ -74,6 +74,6 @@ class ReservationController extends Controller
 
         $reservation->table->updateAvailabilty(false);
 
-        return new ReservationResource($reservation);
+        return (new ReservationResource($reservation))->response()->setStatusCode(200);
     }
 }

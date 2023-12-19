@@ -33,6 +33,6 @@ class OrderController extends Controller
 
         return (new OrderResource(
             $this->order->store($request->reservation_id, $request->table_id, $request->meals, auth()->id())
-        ));
+        ))->response()->setStatusCode(200);
     }
 }

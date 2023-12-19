@@ -13,7 +13,7 @@ class ServiceOnlyCheckout implements CheckoutService
             'paid_amount' => $this->calculateTotal($order->total),
             'paid_at' => Carbon::now(),
             'checkout_method' => 'serviceOnly',
-            'service' => $this->servicePercentage(),
+            'service_percentage' => $this->servicePercentage(),
         ]);
 
         return $order;

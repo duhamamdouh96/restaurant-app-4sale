@@ -50,7 +50,7 @@ class Order extends Model
             'table_id' => $tableId,
             'customer_id' => $customerId,
             'user_id' => User::first()->id ?? (new User)->store()->id,
-            'unique_id' => uniqid().'-'.$reservationId
+            'unique_id' => rand(1231,7879).'-'.$reservationId
         ]);
 
         $order->attachMeals($mealsIds);

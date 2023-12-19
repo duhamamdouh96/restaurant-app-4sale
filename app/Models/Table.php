@@ -36,10 +36,19 @@ class Table extends Model
         $toDateTime = Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s');
 
         return $query->where(function ($q) use ($fromDateTime, $toDateTime) {
-            $q->whereDoesntHave('reservation')
-                ->orWhereHas('reservation', function ($reservation) use ($fromDateTime, $toDateTime) {
+            $q->whereDoesntHave('reservation')->orWhereHas('reservation', function ($reservation) use ($fromDateTime, $toDateTime) {
                     $reservation->available($fromDateTime, $toDateTime);
                 });
             });
+    }
+
+    public function waitingList() : HasMany
+    {
+        return $this->hasMany(WaitingList::class);
+    }
+
+    public function updateAvailabilty($isAvailable) : bool
+    {
+        return $this->update(['is_available' => $isAvailable]);
     }
 }

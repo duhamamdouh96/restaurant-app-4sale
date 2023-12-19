@@ -35,26 +35,32 @@ class ReservationController extends Controller
 
     public function checkAvailability(CheckAvailabiltyRequest $request)
     {
-        $availabileTables = $this->table
-            ->available($request->guests_count, $request->date, $request->from, $request->to)
-            ->get();
+        $availabileTables = $this->table->available(
+            $request->guests_count,
+            $request->date,
+            $request->from,
+            $request->to
+        )->get();
 
         if($availabileTables->isEmpty()) {
-            // $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to);
-
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 
-        return TableResource::collection($availabileTables);
+        return $this->response->success(['available_tables' => TableResource::collection($availabileTables)]);
     }
 
     public function store(StoreReservationRequest $request)
     {
-        $availabileTables = $this->table
-            ->available($request->guests_count, $request->date, $request->from, $request->to)
-            ->get();
+        $availabileTables = $this->table->available(
+            $request->guests_count,
+            $request->date,
+            $request->from,
+            $request->to
+        )->get();
 
         if($availabileTables->isEmpty()) {
+            $this->waitingList->store($request->guests_count, $request->date, $request->from, $request->to, auth()->id());
+
             return $this->response->error(Message::RESERVATION_NOT_AVAILAIBLE);
         }
 
@@ -65,6 +71,8 @@ class ReservationController extends Controller
             $request->from,
             $request->to
         );
+
+        $reservation->table->updateAvailabilty(false);
 
         return new ReservationResource($reservation);
     }

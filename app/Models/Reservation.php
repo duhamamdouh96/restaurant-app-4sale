@@ -33,7 +33,7 @@ class Reservation extends Model
             'from_date_time' => Carbon::parse($date. ' ' .$from)->format('Y-m-d H:i:s'),
             'to_date_time' => Carbon::parse($date. ' ' .$to)->format('Y-m-d H:i:s'),
             'customer_id' => auth()->id(),
-            'guests_count' => $guestsCount
+            'guests_count' => $guestsCount,
         ]);
     }
 
@@ -41,7 +41,7 @@ class Reservation extends Model
     {
         return $query->join('reservations as res', function ($join) {
             $join->on('tables.id', '=', 'res.table_id');
-        })->select('tables.id')->groupBy('tables.id')
-            ->havingRaw("MAX(res.to_date_time) <= '$fromDateTime' OR MIN(res.from_date_time) >= '$toDateTime'");
+        })->select('tables.id', 'tables.is_available')->groupBy('tables.id')
+            ->havingRaw("MAX(res.to_date_time) <= '$fromDateTime' OR MIN(res.from_date_time) >= '$toDateTime' OR tables.is_available = 1");
     }
 }

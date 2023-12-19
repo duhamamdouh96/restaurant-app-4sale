@@ -33,6 +33,8 @@ class CheckoutController extends Controller
 
             $this->checkoutService->checkout($request->checkout_method, $order);
 
+            $order->reservation->table->updateAvailabilty(true);
+
             // print invoice
             return (new OrderResource($order->refresh()));
         } catch(ModelNotFoundException $exception) {

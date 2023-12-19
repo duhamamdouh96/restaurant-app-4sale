@@ -65,6 +65,8 @@ class Meal extends Model
 
     public function calculatePriceAfterDiscount() : float
     {
+        // I assumed that the discount is amount, If it's percentage we can calculate it in a different way like in checkout
+
         return (float) $this->price - (float) $this->discount;
     }
 }

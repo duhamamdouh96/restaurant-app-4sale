@@ -42,11 +42,14 @@ class Order extends Model
 
     public function store($reservationId, $tableId, $mealsIds, $customerId) : self
     {
+        // I assumed that we have a list of users(waiters) coming from a different API or somewhere else
+        // and then we can check the next available waiter
+
         $order = $this->create([
             'reservation_id' => $reservationId,
             'table_id' => $tableId,
             'customer_id' => $customerId,
-            'user_id' => User::first()->id ?? null
+            'user_id' => User::first()->id ?? (new User)->store()->id
         ]);
 
         $order->attachMeals($mealsIds);

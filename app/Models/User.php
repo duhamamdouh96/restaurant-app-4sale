@@ -66,4 +66,13 @@ class User extends Authenticatable
 
         return $user;
     }
+
+    public function store() : self
+    {
+        return $this->create([
+            'name' => 'waiter name goes here',
+            'email' => 'waiter@mail.com',
+            'password' => Hash::make('123456'),
+        ]);
+    }
 }

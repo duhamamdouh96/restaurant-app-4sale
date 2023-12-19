@@ -10,10 +10,11 @@
             <tr>
                 <th>ID</th>
                 <th>Total</th>
-                @if($order->tax_percentage)
+                @if($order->withTaxAndService())
                     <th>Tax</th>
+                    <th>Service</th>
                 @endif
-                @if($order->service_percentage)
+                @if($order->withServiceOnly())
                     <th>Service</th>
                 @endif
                 <th>Customer name</th>
@@ -25,10 +26,11 @@
             <tr style="text-align: center; width:100%;">
                 <td>{{ $order->unique_id }}</td>
                 <td>{{ $order->paid_amount }}</td>
-                @if($order->tax_percentage)
+                @if($order->withTaxAndService())
                     <td>{{ $order->tax_percentage }} %</td>
+                    <td>{{ $order->service_percentage }} %</td>
                 @endif
-                @if($order->service_percentage)
+                @if($order->withServiceOnly())
                     <td>{{ $order->service_percentage }} %</td>
                 @endif
                 <td>{{ $order->customer->name ?? ''}}</td>

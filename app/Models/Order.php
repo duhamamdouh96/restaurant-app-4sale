@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Common\Enums\CheckoutMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -71,5 +72,15 @@ class Order extends Model
     public function calculateTotal() : float
     {
         return $this->update(['total' => $this->details()->pluck('amount_to_pay')->sum()]);
+    }
+
+    public function withTaxAndService()
+    {
+        return $this->tax_percentage && $this->service_percentage && $this->checkout_method == CheckoutMethod::WITH_TAX_AND_SERVICE;
+    }
+
+    public function withServiceOnly()
+    {
+        return $this->service_percentage && $this->checkout_method == CheckoutMethod::WITH_SERVICE_ONLY;
     }
 }

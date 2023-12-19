@@ -18,7 +18,7 @@ class MealFactory extends Factory
     {
         return [
             'title' => $this->faker->text(50),
-            'description' => $this->faker->text(500),
+            'description' => $this->faker->text(100),
             'price' => rand(100, 500),
             'available_quantity' => $this->faker->numberBetween(1, 20),
             'discount' => rand(10, 50)

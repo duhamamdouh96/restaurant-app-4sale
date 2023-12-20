@@ -20,6 +20,8 @@
     - *redis port => 6379*
     - *mailpit port => 1025, 8025*
 
+*Please download and install docker on your machine "https://www.docker.com/get-started/"*
+
 After the ports have been turned off, Please run the following command to install composer through docker:
 
     $ docker run --rm \
@@ -56,6 +58,10 @@ You may also try to run the tests:
 *I assumed that we have waiters "users" in the application and we have an API to get all the available waiters to assign each to order,
 Also, the application should have a listing for reservations API per customer, waiter, and admin*
 
-*Also I assumed that we configured a cron entry in the server "Laravel task scheduling" to run every hour to check if a table is available and reserve it for the next record on the waiting list*
+Also here's a command for the waiting list:
+
+    $ sail artisan reserve-table-from-waiting-list
+
+ *and I assumed that we configured a cron entry in the server "Laravel task scheduling" to run every hour - or any specific time - to check if a table is available then push it to a queue and reserve it for the next record on the waiting list*
 
 That's it and you're good to go!

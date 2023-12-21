@@ -21,8 +21,7 @@ class Table extends Model
 
     public function scopeAvailable($query, int $guestsCount, string $date, string $from, string $to) : Builder
     {
-        return $query->whereHasCapacity($guestsCount)
-            ->whereDoesnotHaveReservations($date, $from, $to);
+        return $query->whereHasCapacity($guestsCount)->whereDoesnotHaveReservations($date, $from, $to);
     }
 
     public function scopeWhereHasCapacity($query, int $guestsCount) : Builder

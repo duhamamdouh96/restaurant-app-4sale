@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AfterDate;
 use App\Traits\HasFailedValidationResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,7 +27,7 @@ class CheckAvailabiltyRequest extends FormRequest
     {
         return [
             'date' => 'required|date|date_format:Y-m-d|after_or_equal:'.date('Y-m-d'),
-            'from' => 'required|date_format:h:i a|after_or_equal:'.date('h:i a'),
+            'from' => ['required', 'date_format:h:i a', new AfterDate($this->input('date'))],
             'to' => 'required|date_format:h:i a|after:from',
             'guests_count' => 'required|integer|min:1',
         ];
